@@ -17,13 +17,17 @@ TITLE = "7 Divů (Duel)"
 
 st.set_page_config(page_title=TITLE, layout="wide")
 
+with st.sidebar:
+    st.subheader(TITLE)
+    with st.expander("Player Setup", expanded=False):
+        num_players = st.number_input("Number of Players", min_value=2, max_value=2, value=2)
 
-st.sidebar.subheader(TITLE)
+        player_names = []
+        for i in range(num_players):
+            player_name = st.text_input(f"Enter name for Player {i+1}", f"Player {i+1}")
+            player_names.append(player_name)
 
-num_players = 2
-player_names = []
-for i in range(num_players):
-    player_names.append(f"Player {i+1}")
+    st.container(height=20, border=False)
 
 columns = st.columns(num_players, gap="large")
 
