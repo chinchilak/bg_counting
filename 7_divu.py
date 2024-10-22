@@ -13,6 +13,8 @@ CATEGORIES = ["Civilian Buildings (blue cards)",
 IMG_ID = list(range(1, len(CATEGORIES) + 1))
 IMG_PATH = "img_7divu"
 
+SEL_STYLE = ["Number Input", "Slider"]
+
 TITLE = "7 Divů (Duel)"
 
 st.set_page_config(page_title=TITLE, layout="wide")
@@ -27,6 +29,8 @@ with st.sidebar:
             player_name = st.text_input(f"Enter name for Player {i+1}", f"Player {i+1}")
             player_names.append(player_name)
 
+        sel_style = st.radio("Input selector style", SEL_STYLE, 0)
+
     st.container(height=20, border=False)
 
 columns = st.columns(num_players, gap="large")
@@ -35,23 +39,32 @@ scores = {category: [] for category in CATEGORIES}
 multipliers = {category: [] for category in CATEGORIES}
 
 for idx, player in enumerate(player_names):
-
     with columns[idx]:
         st.subheader(f"{player}")
         for index, category in enumerate(CATEGORIES):
             with st.expander(f"{category}", expanded=True):
                 col1, col2 = st.columns([0.05, 0.95], gap="small")
                 with col1:
-                    st.image(f"{IMG_PATH}/{index+1}.png")
+                    st.image(f"{IMG_PATH}/{index+1}.png", width=50)
                 with col2:
-                    score = st.number_input(
-                        "Score",
-                        min_value=0,
-                        max_value=100,
-                        value=0,
-                        step=1,
-                        key=f"{player}_{category}_score",
-                        label_visibility="collapsed")
+                    if sel_style == SEL_STYLE[0]:
+                        score = st.number_input(
+                            "Score",
+                            min_value=0,
+                            max_value=100,
+                            value=0,
+                            step=1,
+                            key=f"{player}_{category}_score",
+                            label_visibility="collapsed")
+                    else:
+                        score = st.slider(
+                            "Score",
+                            min_value=0,
+                            max_value=100,
+                            value=0,
+                            step=1,
+                            key=f"{player}_{category}_score",
+                            label_visibility="collapsed")                        
                     scores[category].append(score)
 
 with st.sidebar:

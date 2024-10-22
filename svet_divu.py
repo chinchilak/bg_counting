@@ -24,6 +24,8 @@ PRESETS = [{CATEGORIES[2]: 2},
 IMG_ID = list(range(1, len(CATEGORIES) + 1))
 IMG_PATH = "img_svetdivu"
 
+SEL_STYLE = ["Number Input", "Slider"]
+
 TITLE = "Svět Divů"
 
 st.set_page_config(page_title=TITLE, layout="wide")
@@ -38,6 +40,8 @@ with st.sidebar:
         for i in range(num_players):
             player_name = st.text_input(f"Enter name for Player {i+1}", f"Player {i+1}")
             player_names.append(player_name)
+
+        sel_style = st.radio("Input selector style", SEL_STYLE, 0)
 
     st.container(height=20, border=False)
 
@@ -54,37 +58,68 @@ for idx, player in enumerate(player_names):
             with st.expander(f"{category}", expanded=True):
                 col1, col2, col3 = st.columns([0.05, 0.475, 0.475], gap="small")
                 with col1:
-                    st.image(f"{IMG_PATH}/{index}.png")
+                    st.image(f"{IMG_PATH}/{index}.png", width=50)
                 with col2:
-                    if category == CATEGORIES[0]:
-                        multiplier = st.number_input(
-                            "Multiplier",
-                            min_value=0,
-                            max_value=20,
-                            value=1,
-                            step=1,
-                            key=f"{player}_{category}_multiplier",
-                            label_visibility="collapsed",
-                            disabled=True)
+                    if sel_style == SEL_STYLE[0]:
+                        if category == CATEGORIES[0]:
+                            multiplier = st.number_input(
+                                "Multiplier",
+                                min_value=0,
+                                max_value=20,
+                                value=1,
+                                step=1,
+                                key=f"{player}_{category}_multiplier",
+                                label_visibility="collapsed",
+                                disabled=True)
+                        else:
+                            multiplier = st.number_input(
+                                "Multiplier",
+                                min_value=0,
+                                max_value=20,
+                                value=0,
+                                step=1,
+                                key=f"{player}_{category}_multiplier",
+                                label_visibility="collapsed")
                     else:
-                        multiplier = st.number_input(
-                            "Multiplier",
-                            min_value=0,
-                            max_value=20,
-                            value=0,
-                            step=1,
-                            key=f"{player}_{category}_multiplier",
-                            label_visibility="collapsed")                        
+                        if category == CATEGORIES[0]:
+                            multiplier = st.slider(
+                                "Multiplier",
+                                min_value=0,
+                                max_value=20,
+                                value=1,
+                                step=1,
+                                key=f"{player}_{category}_multiplier",
+                                label_visibility="collapsed",
+                                disabled=True)
+                        else:
+                            multiplier = st.slider(
+                                "Multiplier",
+                                min_value=0,
+                                max_value=20,
+                                value=0,
+                                step=1,
+                                key=f"{player}_{category}_multiplier",
+                                label_visibility="collapsed")                        
                     multipliers[category].append(multiplier)
                 with col3:
-                    score = st.number_input(
-                        "Score",
-                        min_value=0,
-                        max_value=25,
-                        value=0,
-                        step=1,
-                        key=f"{player}_{category}_score",
-                        label_visibility="collapsed")
+                    if sel_style == SEL_STYLE[0]:
+                        score = st.number_input(
+                            "Score",
+                            min_value=0,
+                            max_value=25,
+                            value=0,
+                            step=1,
+                            key=f"{player}_{category}_score",
+                            label_visibility="collapsed")
+                    else:
+                        score = st.slider(
+                            "Score",
+                            min_value=0,
+                            max_value=25,
+                            value=0,
+                            step=1,
+                            key=f"{player}_{category}_score",
+                            label_visibility="collapsed")
                     scores[category].append(score)
 
 with st.sidebar:
