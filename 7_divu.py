@@ -1,5 +1,4 @@
-import streamlit as st
-import pandas as pd
+from utils import *
 
 CATEGORIES = ["Civilian Buildings (blue cards)", 
               "Scientific Buildings (green cards)", 
@@ -15,7 +14,11 @@ IMG_PATH = "img_7divu"
 
 SEL_STYLE = ["Number Input", "Slider"]
 
+MIN_SCORE_VAL = 0
+MAX_SCORE_VAL = 100
+
 TITLE = "7 Divů (Duel)"
+
 
 st.set_page_config(page_title=TITLE, layout="wide")
 
@@ -30,6 +33,9 @@ with st.sidebar:
             player_names.append(player_name)
 
         sel_style = st.radio("Input selector style", SEL_STYLE, 0)
+
+        sel_min_val = st.number_input("Minimum Field Value", -1000, 1000, MIN_SCORE_VAL, 1)
+        sel_max_val = st.number_input("Maximum Field Value", -1000, 1000, MAX_SCORE_VAL, 1)
 
     st.container(height=20, border=False)
 
@@ -47,24 +53,7 @@ for idx, player in enumerate(player_names):
                 with col1:
                     st.image(f"{IMG_PATH}/{index+1}.png", width=50)
                 with col2:
-                    if sel_style == SEL_STYLE[0]:
-                        score = st.number_input(
-                            "Score",
-                            min_value=0,
-                            max_value=100,
-                            value=0,
-                            step=1,
-                            key=f"{player}_{category}_score",
-                            label_visibility="collapsed")
-                    else:
-                        score = st.slider(
-                            "Score",
-                            min_value=0,
-                            max_value=100,
-                            value=0,
-                            step=1,
-                            key=f"{player}_{category}_score",
-                            label_visibility="collapsed")                        
+                    score = wgt_st_input(sel_style, f"{player}_{category}", "Score", sel_min_val, sel_max_val, 0, 1, "collapsed", False)
                     scores[category].append(score)
 
 with st.sidebar:
